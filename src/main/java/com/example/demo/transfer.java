@@ -44,18 +44,23 @@ public class transfer {
         } else {
             System.out.println("Use standard accounts for Alice and Bob, expected to run against development network");
             aliceKey = Schnorrkel.getInstance().generateKeyPairFromSeed(
-                    Hex.decodeHex("e5be9a5092b81bca64be81d212e7f2f9eba183bb7a90954f7b76361f6edb5c0a")
+                    Hex.decodeHex("e44534d42e13e5fbce16fd1073aba2e63744303eb188f50aa7d2342353dcf8b6")
             );
-            bob =  Address.from("5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty");
+            bob =  Address.from("5D9koUJqsKYP7xscNZeok4zFWinQqceR1mccnxwSGzi6APPo");
         }
         alice = new Address(SS58Type.Network.CANARY, aliceKey.getPublicKey());
-//        Address bob =  Address.from("5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty");
-//        Address alice =  Address.from("5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY");
-        Random random = new Random();
-        DotAmount amount = DotAmount.fromPlancks(
-                Math.abs(random.nextLong()) % DotAmount.fromDots(0.002).getValue().longValue()
-        );
 
+        Random random = new Random();
+        DotAmount amount = DotAmount.fromDots(
+                100
+        );
+//        DotAmount amount = DotAmount.fromPlancks(
+//                Math.abs(random.nextLong()) % DotAmount.fromDots(0.002).getValue().longValue() //随机产生
+//        );
+
+//        DotAmount amount = DotAmount.fromDots(
+//                100
+//        );
 
         try (PolkadotWsApi client = PolkadotWsApi.newBuilder().connectTo(api).build()) {
             System.out.println("Connected: " + client.connect().get());
@@ -125,6 +130,8 @@ public class transfer {
             System.out.println("Using genesis : " + context.getGenesis());
             System.out.println("Using runtime : " + context.getTxVersion() + ", " + context.getRuntimeVersion());
             System.out.println("Using nonce   : " + context.getNonce());
+//            System.out.println("Using nonce   : " + context.getEra());
+//            System.out.println("Using nonce   : " + context.getEraBlockHash());
             System.out.println("------");
             System.out.println("Currently available: " + AMOUNT_FORMAT.format(aliceAccount.getData().getFree()));
             System.out.println("Transfer           : " + AMOUNT_FORMAT.format(amount) + " from " + alice + " to " + bob);

@@ -1,26 +1,51 @@
 package com.example.demo;
 
+import io.emeraldpay.polkaj.api.StandardSubscriptions;
 import io.emeraldpay.polkaj.apihttp.PolkadotHttpApi;
+import io.emeraldpay.polkaj.apiws.PolkadotWsApi;
 import io.emeraldpay.polkaj.scaletypes.AccountInfo;
 import io.emeraldpay.polkaj.tx.AccountRequests;
 import io.emeraldpay.polkaj.types.Address;
 import io.emeraldpay.polkaj.types.DotAmount;
 import io.emeraldpay.polkaj.types.DotAmountFormatter;
 
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicLong;
+
 public class balance {
 
     public static void main(String[] args) throws Exception {
-        //String api = "wss://innertest.dbcwallet.io";
-        try (PolkadotHttpApi client = PolkadotHttpApi.newBuilder().build()) {
+        String api = "wss://innertest.dbcwallet.io";
+//        try (PolkadotHttpApi client = PolkadotHttpApi.newBuilder().build()) {
             DotAmountFormatter formatter = DotAmountFormatter.autoFormatter();
-
+//
 //            DotAmount total = AccountRequests.totalIssuance().execute(client).get();
 //            System.out.println(
 //                    "Total Issued: " +
 //                            formatter.format(total)
 //            );
+        try (PolkadotWsApi client = PolkadotWsApi.newBuilder().connectTo(api).build()) {
+            System.out.println("Connected: " + client.connect().get());
 
-            Address address = Address.from("5C7f75bEAaDkpMAW12S9rPraTmWc7U36jS9rBkYvYugygD2C");
+            // Subscribe to block heights
+            AtomicLong height = new AtomicLong(0);
+            CompletableFuture<Long> waitForBlocks = new CompletableFuture<>();
+            client.subscribe(
+                    StandardSubscriptions.getInstance().newHeads()
+            ).get().handler((event) -> {
+                long current = event.getResult().getNumber();
+                System.out.println("Current height: " + current);
+                if (height.get() == 0) {
+                    height.set(current);
+                } else {
+                    long blocks = current - height.get();
+                    if (blocks > 3) {
+                        waitForBlocks.complete(current);
+                    }
+                }
+            });
+
+            Address address = Address.from("5EEkG66sojAU6s62rzQQy7J8kYWwWJYW1j4szFpTJ2Lpkgq3");
             System.out.println("Address: " + address);
 
             AccountInfo balance = AccountRequests.balanceOf(address).execute(client).get();

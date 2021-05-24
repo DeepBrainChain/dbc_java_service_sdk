@@ -33,7 +33,7 @@ public class Keys {
     public static void derive() throws SchnorrkelException {
         System.out.println("Derive new Address from existing");
         System.out.println("");
-        Address address = Address.from("HhjZogQpUMuQEu8ChSAQUWj9UCnqAmCkogitYjqzCqD7xrq");
+        Address address = Address.from("HkDBsUVBTtF4E6m8sQ4sX1KzL6WkKRphZmYtRpm2cPUktwf");
         System.out.println("  Address (curr): " + address);
         Schnorrkel.PublicKey publicKey = new Schnorrkel.PublicKey(address.getPubkey());
 
