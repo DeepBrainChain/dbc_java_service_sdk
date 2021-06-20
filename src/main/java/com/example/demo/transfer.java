@@ -28,7 +28,7 @@ public class transfer {
 
 
     public static void main(String[] args) throws Exception {
-        String api = "wss://innertest.dbcwallet.io";
+        String api = "wss://info.dbcwallet.io";
         if (args.length >= 1) {
             api = args[0];
         }
@@ -133,7 +133,7 @@ public class transfer {
 //            System.out.println("Using nonce   : " + context.getEra());
 //            System.out.println("Using nonce   : " + context.getEraBlockHash());
             System.out.println("------");
-            System.out.println("Currently available: " + AMOUNT_FORMAT.format(aliceAccount.getData().getFree()));
+  //          System.out.println("Currently available: " + AMOUNT_FORMAT.format(aliceAccount.getData().getFree()));
             System.out.println("Transfer           : " + AMOUNT_FORMAT.format(amount) + " from " + alice + " to " + bob);
 
             // prepare call, and sign with sender Secret Key within the context

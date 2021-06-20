@@ -9,13 +9,14 @@ import io.emeraldpay.polkaj.types.Address;
 import io.emeraldpay.polkaj.types.DotAmount;
 import io.emeraldpay.polkaj.types.DotAmountFormatter;
 
+import java.math.BigInteger;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class balance {
 
     public static void main(String[] args) throws Exception {
-        String api = "wss://innertest.dbcwallet.io";
+        String api = "wss://info.dbcwallet.io";
 //        try (PolkadotHttpApi client = PolkadotHttpApi.newBuilder().build()) {
             DotAmountFormatter formatter = DotAmountFormatter.autoFormatter();
 //
@@ -45,7 +46,7 @@ public class balance {
                 }
             });
 
-            Address address = Address.from("5EEkG66sojAU6s62rzQQy7J8kYWwWJYW1j4szFpTJ2Lpkgq3");
+            Address address = Address.from("5GGu2iQBLXuys61zbSnzfBsVMYzwaM3FfMbpMAmsAiExSWcN");
             System.out.println("Address: " + address);
 
             AccountInfo balance = AccountRequests.balanceOf(address).execute(client).get();
@@ -67,8 +68,9 @@ public class balance {
                         .append(formatter.format(balance.getData().getMiscFrozen()))
                         .append(" for Misc.)");
             }
-
-            System.out.println(status.toString());
+            BigInteger dbc_amount=balance.getData().getFree().getValue().divide(new BigInteger("1000000000000000"));
+            
+            System.out.println(dbc_amount.longValue());
         }
     }
 }

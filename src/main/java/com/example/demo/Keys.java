@@ -24,7 +24,7 @@ public class Keys {
         System.out.println("");
         Schnorrkel.KeyPair key = Schnorrkel.getInstance().deriveKeyPair(rootKey, Schnorrkel.ChainCode.from("demo".getBytes()));
 
-        Address address = new Address(SS58Type.Network.CANARY, key.getPublicKey());
+        Address address = new Address(SS58Type.Network.SUBSTRATE, key.getPublicKey());
         System.out.println("   Address: " + address);
         System.out.println("Public Key: " + Hex.encodeHexString(key.getPublicKey()));
         System.out.println("Secret Key: " + Hex.encodeHexString(key.getSecretKey()));
